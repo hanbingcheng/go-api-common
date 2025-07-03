@@ -1,0 +1,18 @@
+package errors
+
+import "github.com/gin-gonic/gin"
+
+// ErrorMiddleware エラー処理用ミドルウェア
+func ErrorMiddleware() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		c.Next() // リクエスト処理を実行
+
+		// エラーがあれば処理
+		if len(c.Errors) > 0 {
+			for _, err := range c.Errors {
+				HandleError(c, err)
+				return // 最初のエラーのみ処理
+			}
+		}
+	}
+}
